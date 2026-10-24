@@ -1,4 +1,4 @@
-# sobre.gilsoares.dev
+# gilsoares.dev
 
 Página pessoal com tema Star Wars. HTML, CSS e JS puros, sem build.
 
@@ -13,13 +13,17 @@ python3 -m http.server 8642
 # abra http://localhost:8642 — para ver a abertura de novo, clique em "Rever abertura"
 ```
 
-## Publicar (GitHub Pages)
+## Publicação (GitHub Pages + Cloudflare DNS)
 
-O arquivo `CNAME` já aponta para `sobre.gilsoares.dev` e o `.nojekyll` faz o Pages servir os arquivos como estão.
+O site é publicado pelo GitHub Pages a partir da branch `main` (pasta raiz). O arquivo `CNAME` define o domínio
+`gilsoares.dev` e o `.nojekyll` faz o Pages servir os arquivos como estão. Basta dar push para atualizar.
 
-1. Suba esta pasta para um repositório público no GitHub (ex.: `sobre`).
-2. Settings → Pages → Source: "Deploy from a branch", branch `main`, pasta `/ (root)`.
-3. No DNS do domínio, crie um registro `CNAME` com nome `sobre` e valor `<usuario>.github.io`.
-4. Volte em Settings → Pages, espere o check de DNS ficar verde e marque "Enforce HTTPS".
-   Domínios `.dev` só abrem com HTTPS, então o site só carrega depois que o certificado for emitido (alguns minutos).
-5. Recomendado: verifique o domínio em github.com/settings/pages para ninguém mais usá-lo no GitHub.
+Registros na Cloudflare, todos com o proxy desligado ("DNS only"):
+
+| Tipo | Nome | Conteúdo |
+|------|------|----------|
+| A | `@` | `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153` (um registro cada) |
+| AAAA | `@` | `2606:50c0:8000::153`, `2606:50c0:8001::153`, `2606:50c0:8002::153`, `2606:50c0:8003::153` |
+| CNAME | `www` | `linuxsoares.github.io` (o GitHub redireciona `www` para o domínio raiz) |
+
+Domínios `.dev` só abrem com HTTPS: o site carrega depois que o GitHub emite o certificado e "Enforce HTTPS" é ativado.
