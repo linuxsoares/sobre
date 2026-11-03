@@ -22,6 +22,9 @@
       en: "Have a project, a role or just want to chat? Reach me wherever you prefer.",
     },
     experience: { pt: "Experiência", en: "Experience" },
+    project: { pt: "Missão paralela", en: "Side mission" },
+    projects: { pt: "Projetos", en: "Projects" },
+    visit: { pt: "Visitar", en: "Visit" },
     certs: { pt: "Certificações", en: "Certifications" },
     back: { pt: "Voltar ao início", en: "Back to start" },
     farewell: { pt: "Que a Força esteja com você", en: "May the Force be with you" },
@@ -347,7 +350,7 @@
   function mountDiagrams() {
     diagrams.clear();
     const archs = { origens: C.originsArch };
-    for (const ep of C.episodes) archs[ep.id] = ep.arch;
+    for (const ep of [...C.episodes, ...(C.projects || [])]) archs[ep.id] = ep.arch;
     document.querySelectorAll("[data-arch]").forEach((slot) => {
       const arch = archs[slot.dataset.arch];
       if (!arch) return slot.remove();
@@ -413,6 +416,24 @@
       )
       .join("");
 
+    const projects = (C.projects || [])
+      .map(
+        (p) => `
+      <section id="${p.id}" class="panel has-arch" data-label="${p.name}">
+        <div class="card">
+          <p class="eyebrow">${t(UI.project)} · ${p.name} · ${t(p.since)}</p>
+          <h2>${t(p.title)}</h2>
+          <div class="saber-line"></div>
+          <p>${t(p.intro)}</p>
+          ${list(p.facts.map((f) => `<li>${t(f)}</li>`), "facts")}
+          ${list([`<li><a href="${p.url}" rel="noopener">${t(UI.visit)} ${new URL(p.url).host} ↗</a></li>`], "pills")}
+          ${p.arch ? archTry() : ""}
+        </div>
+        <div data-arch="${p.id}"></div>
+      </section>`
+      )
+      .join("");
+
     const origins = `
       <section id="origens" class="panel has-arch" data-label="${t(UI.originsTitle)}">
         <div class="card">
@@ -428,6 +449,7 @@
     const experience = C.episodes.map(
       (ep) => `<li><a href="#${ep.id}">${ep.company} <span>${t(ep.period)}</span></a></li>`
     );
+    const projectLinks = (C.projects || []).map((p) => `<li><a href="#${p.id}">${p.name}</a></li>`);
     const certs = (C.certs || []).map((c) => `<li title="${t(c.title)}">${t(c.name)}</li>`);
 
     const contact = `
@@ -440,6 +462,7 @@
           ${contactLinks("pills")}
           <h3 class="eyebrow">${t(UI.experience)}</h3>
           ${list(experience, "chips")}
+          ${projectLinks.length ? `<h3 class="eyebrow">${t(UI.projects)}</h3>${list(projectLinks, "chips")}` : ""}
           ${certs.length ? `<h3 class="eyebrow">${t(UI.certs)}</h3>${list(certs, "chips")}` : ""}
           <p class="farewell">${t(UI.farewell)}</p>
           <div class="actions">
@@ -450,7 +473,7 @@
         </div>
       </section>`;
 
-    document.getElementById("content").innerHTML = hero + episodes + origins + contact;
+    document.getElementById("content").innerHTML = hero + episodes + projects + origins + contact;
     mountDiagrams();
 
     const sections = [...document.querySelectorAll("main section")];
