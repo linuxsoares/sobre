@@ -163,6 +163,70 @@ window.CONTENT = {
     },
   ],
 
+  // Projetos próprios em desenvolvimento. Usam o mesmo formato de arch dos episódios.
+  projects: [
+    {
+      id: "melhorar-aprendizagem",
+      name: "Melhore o Aprendizado",
+      url: "https://melhorar-aprendizagem.com.br/",
+      since: { pt: "desde fev 2026", en: "since Feb 2026" },
+      title: { pt: "Qualquer texto vira exercício", en: "Any text becomes an exercise" },
+      intro: {
+        pt: "Cole um texto ou envie fotos e a IA gera exercícios com gabarito em segundos, para responder na tela, mandar o link para a turma ou imprimir.",
+        en: "Paste a text or upload photos and AI generates exercises with an answer key in seconds, to answer on screen, share with a class or print.",
+      },
+      facts: [
+        { pt: "Da escola ao <strong>ENEM</strong>, idiomas, concursos, exames profissionais e EJA", en: "From school to <strong>ENEM</strong>, languages, public and professional exams and adult education" },
+        { pt: "Atividades adaptadas para autismo, TDAH, dislexia e discalculia", en: "Worksheets adapted for autism, ADHD, dyslexia and dyscalculia" },
+        { pt: "<strong>Next.js</strong>, Prisma, OpenAI e DeepSeek, pagamentos com Stripe", en: "<strong>Next.js</strong>, Prisma, OpenAI and DeepSeek, payments with Stripe" },
+      ],
+      arch: {
+        nodes: [
+          { id: "users", kind: "client", x: 8, y: 36, label: { pt: "Professores", en: "Teachers" } },
+          { id: "app", kind: "gateway", x: 30, y: 36, label: "Next.js" },
+          { id: "gen", kind: "service", x: 54, y: 14, label: { pt: "Gerador", en: "Generator" } },
+          { id: "pay", kind: "service", x: 54, y: 58, label: "Stripe" },
+          { id: "openai", kind: "server", x: 80, y: 8, label: "OpenAI" },
+          { id: "deepseek", kind: "server", x: 80, y: 30, label: "DeepSeek" },
+          { id: "db", kind: "db", x: 80, y: 58, label: "Prisma" },
+        ],
+        edges: [["users", "app"], ["app", "gen"], ["app", "pay"], ["gen", "openai"], ["gen", "deepseek"], ["gen", "db"], ["pay", "db"]],
+        sources: ["users"],
+      },
+    },
+    {
+      id: "terapiainfoco",
+      name: "TerapiaInFoco",
+      url: "https://app.terapiainfoco.com.br/",
+      since: { pt: "desde set 2026", en: "since Sep 2026" },
+      title: { pt: "Gestão clínica para psicólogos", en: "Clinical management for psychologists" },
+      intro: {
+        pt: "Plataforma de gestão clínica psicológica com teleatendimento, transcrição assistida por IA e dados sensíveis cifrados campo a campo, em conformidade com a LGPD.",
+        en: "A clinical management platform for psychologists with telehealth, AI-assisted transcription and sensitive data encrypted field by field, in line with LGPD.",
+      },
+      facts: [
+        { pt: "Teleconsulta <strong>WebRTC</strong> com sala de espera e prontuário eletrônico", en: "<strong>WebRTC</strong> teleconsultation with a waiting room and electronic records" },
+        { pt: "Transcrição e síntese SOAP por IA, sempre revisadas pelo psicólogo", en: "AI transcription and SOAP notes, always reviewed by the psychologist" },
+        { pt: "Envelope encryption <strong>AES-256-GCM</strong> com KMS e blind indexing", en: "<strong>AES-256-GCM</strong> envelope encryption with KMS and blind indexing" },
+      ],
+      arch: {
+        nodes: [
+          { id: "psi", kind: "client", x: 8, y: 22, label: { pt: "Psicólogos", en: "Therapists" } },
+          { id: "pac", kind: "client", x: 8, y: 54, label: { pt: "Pacientes", en: "Patients" } },
+          { id: "api", kind: "gateway", x: 30, y: 38, label: "Hono · Bun" },
+          { id: "clin", kind: "service", x: 54, y: 14, label: { pt: "Prontuário", en: "Records" } },
+          { id: "ai", kind: "service", x: 54, y: 38, label: { pt: "Transcrição", en: "Transcription" } },
+          { id: "notif", kind: "queue", x: 54, y: 62, label: { pt: "Lembretes", en: "Reminders" } },
+          { id: "kms", kind: "server", x: 80, y: 14, label: "KMS" },
+          { id: "pg", kind: "db", x: 80, y: 38, label: "PostgreSQL" },
+          { id: "redis", kind: "db", x: 80, y: 62, label: "Redis" },
+        ],
+        edges: [["psi", "api"], ["pac", "api"], ["api", "clin"], ["api", "ai"], ["api", "notif"], ["clin", "kms"], ["clin", "pg"], ["ai", "pg"], ["notif", "redis"]],
+        sources: ["psi", "pac"],
+      },
+    },
+  ],
+
   // Linha do tempo da seção "Origens".
   timeline: [
     { year: "2008–11", text: { pt: "Estagiário e depois analista de suporte e dev Java, Museu de Arte Moderna de São Paulo", en: "Intern, then support analyst and Java developer, São Paulo Museum of Modern Art" } },
